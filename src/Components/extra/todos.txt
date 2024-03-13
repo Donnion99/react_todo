@@ -1,0 +1,90 @@
+import { useState } from "react";
+import Table from "react-bootstrap/Table";
+import { propTypes } from "react-bootstrap/esm/Image";
+
+function Todos(props) {
+  let [task_list, updatetask] = useState([
+    { Task: "First Task", Desc: "This is my first Task", id: 4 },
+  ]);
+  function refresh() {
+    updatetask([props.data]);
+    console.log(props.data);
+    console.log(task_list);
+  }
+
+  let [complete_list, update] = useState([
+    { Task: " Task NOPE", Desc: "This is my first Task NOPE", id: 7 },
+  ]);
+
+  function moving(event) {
+    if (props.method == "Completed") {
+      //getting id of task by event function
+      let id = event.currentTarget.id;
+      // moving to another location
+      let index = task_list.findIndex((element) => element.id === id);
+      console.log(event.currentTarget);
+
+      // Remove the element from the source array
+      let removedElement = task_list.splice(index, 1);
+      // console.log(task_list);
+
+      // Add the removed element to the destination array
+      complete_list.push(removedElement[0]);
+      let updating = update([...complete_list, removedElement[0]]);
+      // console.log(complete_list);
+    } else if (props.method == "Delete") {
+      // deleting from another
+      let id = event.currentTarget.id;
+      // moving to another location
+      let index = complete_list.findIndex((element) => element.id === id - 1);
+
+      // Remove the element from the source array
+      let removedElement = complete_list.splice(index, 1);
+      console.log(removedElement);
+      console.log(complete_list);
+      console.log(event.currentTarget.id);
+    }
+  }
+
+  function renders() {
+    let type = props.method ? "Completed" : "Deleted";
+    let render = task_list.map((item) => (
+      <>
+        <tr key={item.id}>
+          <td>{item.id}</td>
+          <td>{item.Task}</td>
+          <td>{item.Desc}</td>
+          <input
+            id={item.id}
+            onClick={moving}
+            type="checkbox"
+            name="Checkbox"
+          />
+          <label htmlFor="Checkbox">{type}</label>
+        </tr>
+      </>
+    ));
+    return render;
+  }
+
+  return (
+    <>
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Task</th>
+            <th>Desc</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>{renders()}</tbody>
+      </Table>
+      <button onClick={refresh}>Refresh</button>
+    </>
+  );
+}
+Todos.prototype = {
+  method: propTypes.fluid,
+};
+export default Todos;

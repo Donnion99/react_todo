@@ -1,0 +1,77 @@
+import { useState } from "react";
+
+function Add() {
+  let [final_task, up_finaltask] = useState([
+    { Task: "task 1", Desc: "desc 1", id: 1 },
+    { Task: "task 2", Desc: "desc 2", id: 2 },
+    { Task: "task 3", Desc: "desc 3", id: 3 },
+  ]);
+
+  const list_tasks = final_task.map((product) => (
+    <>
+      <li key={product.id}>{product.Task}</li>
+      <li>{product.Desc}</li>
+    </>
+  ));
+  const [inputValue1, setInputValue1] = useState("");
+  const [inputValue2, setInputValue2] = useState("");
+
+  function handleChange1(e) {
+    setInputValue1(e.target.value);
+  }
+  function handleChange2(e) {
+    setInputValue2(e.target.value);
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    up_finaltask([
+      ...final_task,
+      { Task: inputValue1, Desc: inputValue2, id: 4 },
+    ]);
+    setInputValue1("");
+    setInputValue2("");
+  }
+
+  return (
+    <>
+      <form>
+        <div className="mb-3">
+          <label htmlFor="exampleInputEmail1" className="form-label">
+            Task
+          </label>
+          <input
+            onChange={handleChange1}
+            type="text"
+            className="form-control"
+            placeholder="Enter your Task"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="exampleInputPassword1" className="form-label">
+            Description
+          </label>
+          <input
+            onChange={handleChange2}
+            type="text"
+            className="form-control"
+            placeholder="Enter Description"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <button onClick={handleSubmit} className="btn btn-primary">
+          Show Tasks
+        </button>
+      </form>
+
+      <ul>Task : {final_task[0].Task}</ul>
+      <ul>Desc : {final_task[0].Desc}</ul>
+
+      <ul>{list_tasks}</ul>
+      <h1>{inputValue1}</h1>
+    </>
+  );
+}
+
+export default Add;
